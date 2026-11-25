@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>کمیٹی اور روزانہ وصولی ایپ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap');
+:root{--green:#123d32;--green2:#176b50;--mint:#eaf3ee;--ink:#20332b;--muted:#718078;--line:#e3ebe6;--gold:#c79b45}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#eaf2ed 0,#f7f9f7 270px);color:var(--ink);font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq',Tahoma,serif;line-height:1.9}
+header{background:linear-gradient(135deg,#0c2d26,#176b50);color:#fff;padding:26px 16px 30px;text-align:center;border-bottom:4px solid var(--gold);box-shadow:0 8px 24px #123d3225}
+header h1{margin:0 0 6px;font-size:27px;font-weight:700;letter-spacing:.2px}
+header p{margin:0;color:#d9e9df;font-size:14px}
+main{max-width:960px;margin:22px auto;padding:0 14px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stat,.panel{background:#fff;border:1px solid #e7eee9;border-radius:17px;padding:17px;box-shadow:0 5px 18px #183c2a0b;margin-bottom:13px}
+.stat{position:relative;overflow:hidden;font-size:14px;color:#627269}
+.stat:before{content:"";position:absolute;right:0;top:0;bottom:0;width:4px;background:var(--green2)}
+.stat b{display:block;font-family:Tahoma,Arial,sans-serif;font-size:21px;line-height:1.6;color:var(--green);margin-top:5px;font-weight:800}
+nav{display:flex;gap:8px;overflow-x:auto;padding:5px 1px 12px;margin:14px 0;scrollbar-width:thin}
+button{border:0;border-radius:11px;padding:10px 15px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;background:var(--green2);color:#fff;box-shadow:0 3px 9px #176b5020;transition:.15s}
+button:active{transform:scale(.98)}
+nav button{white-space:nowrap;background:#fff;color:var(--green);border:1px solid #dce8e0;box-shadow:none}
+nav button.active{background:var(--green);color:#fff;border-color:var(--green)}
+button.danger{background:#a83232}
+h2{font-size:21px;color:var(--green);margin:0 0 8px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;color:var(--green);margin:20px 0 8px}
+p{margin:8px 0}
+.muted{color:var(--muted);font-size:13px}
+label{display:block;margin:11px 0 5px;font-weight:700;color:#31483c}
+input,select{width:100%;padding:11px 13px;border:1px solid #d5e1d9;border-radius:11px;font-size:16px;background:#fbfdfb;color:var(--ink);font-family:Tahoma,Arial,sans-serif;min-height:46px;outline:none}
+input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #176b5018}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px}
+table{width:100%;border-collapse:collapse;min-width:520px;background:#fff}
+th,td{text-align:right;padding:11px 12px;border-bottom:1px solid var(--line)}
+th{background:#edf5f0;color:var(--green);font-weight:700}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:#fbfdfb}
+.hidden{display:none}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.total{font-size:20px;font-weight:bold;color:var(--green2)}
+.receipt{padding:12px 5px;border-bottom:1px solid var(--line);line-height:2}
+.receipt small{color:var(--muted)}
+section.panel{padding:19px}
+@media(max-width:560px){header{padding:20px 12px 24px}header h1{font-size:23px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:12px;font-size:12px}.stat b{font-size:16px}.panel{padding:14px}nav{margin:10px 0}}
+@media print{nav,.actions,form,.noprint{display:none!important}body{background:white}.panel,.stat{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+<header><h1>کمیٹی اور روزانہ وصولی</h1><p>14 ممبران • 12 ماہ • ہر ممبر کا الگ حساب</p></header>
+<main>
+<div class="stats">
+ <div class="stat">کل ممبران<b>14</b></div>
+ <div class="stat">ماہانہ کمیٹی فی ممبر<b>225,000 روپے</b></div>
+ <div class="stat">ماہانہ کمیٹی کل<b>31,50,000 روپے</b></div>
+ <div class="stat">روزانہ وصولی<b id="dailyTotal">0 روپے</b></div>
+</div>
+<nav class="noprint">
+<button class="active" data-tab="members">ممبران</button><button data-tab="daily">روزانہ وصولی</button><button data-tab="committee">ماہانہ کمیٹی</button><button data-tab="draw">قرعہ اندازی</button><button data-tab="report">رپورٹ / بیک اپ</button>
+</nav>
+<section id="members" class="panel">
+<h2>ممبران کی فہرست</h2><p class="muted">ہر ممبر کے نام کے ساتھ درج رقم روزانہ وصولی کی ابتدائی/مقررہ رقم ہے۔ موبائل نمبر شامل نہیں کیے گئے۔</p>
+<div class="tablewrap"><table><thead><tr><th>نمبر</th><th>ممبر کا نام</th><th>روزانہ رقم</th><th>اب تک روزانہ جمع</th></tr></thead><tbody id="membersBody"></tbody></table></div>
+</section>
+<section id="daily" class="panel hidden">
+<h2>روزانہ وصولی درج کریں</h2><p class="muted">یہ رقم ماہانہ کمیٹی کی 225,000 روپے قسط سے الگ رکھی جائے گی۔</p>
+<form id="receiptForm">
+<div class="grid"><div><label>تاریخ</label><input type="date" id="rdate" required></div><div><label>ممبر</label><select id="rmember"></select></div></div>
+<label>وصول شدہ رقم (روپے)</label><input type="number" id="ramount" min="1" step="1" required>
+<label>تفصیل (اختیاری)</label><input id="rnote" placeholder="مثلاً نقد وصولی">
+<div class="actions"><button type="submit">وصولی محفوظ کریں</button></div></form>
+<h3>وصولیوں کا ریکارڈ</h3><div id="receipts"></div>
+</section>
+<section id="committee" class="panel hidden">
+<h2>ماہانہ کمیٹی کا حساب</h2><p>ہر ممبر کی ماہانہ قسط: <b>225,000 روپے</b>۔ یہ روزانہ وصولی سے الگ ہے۔</p>
+<label>مہینہ منتخب کریں</label><select id="month"></select>
+<div class="tablewrap"><table><thead><tr><th>ممبر</th><th>قسط کی حالت</th><th>عمل</th></tr></thead><tbody id="committeeBody"></tbody></table></div>
+</section>
+<section id="draw" class="panel hidden">
+<h2>قرعہ اندازی</h2><p class="muted">12 ماہ میں 12 قرعے ہوں گے۔ 14 ممبران ہونے کی وجہ سے اس دورانیے میں 2 ممبران کی باری نہیں آئے گی۔ ایک ممبر دوبارہ منتخب نہیں ہوگا۔</p>
+<label>مہینہ</label><select id="drawMonth"></select>
+<div class="actions"><button id="drawBtn">قرعہ نکالیں</button></div><h3 id="winner"></h3><div id="drawHistory"></div>
+</section>
+<section id="report" class="panel hidden">
+<h2>رپورٹ اور بیک اپ</h2><p>تمام ریکارڈ اسی موبائل کے اسی براؤزر میں محفوظ رہتا ہے۔ موبائل/براؤزر کا ڈیٹا صاف کرنے سے پہلے بیک اپ ضرور لیں۔</p>
+<div class="actions"><button onclick="window.print()">رپورٹ پرنٹ / PDF</button><button id="backup">بیک اپ ڈاؤن لوڈ</button><label class="noprint">بیک اپ واپس بحال کریں<input type="file" id="restore" accept="application/json"></label></div>
+</section>
+</main>
+<script>
+const members=[
+["مدینہ گارمنٹس",7500],["شہاب کلاتھ",7500],["وسیم شہزاد",7500],["عرشی جیولرز",7500],
+["حماد کلاتھ",7500],["خالد پٹھان",7500],["حیات اللہ پٹھان",7500],["اسلم سٹائلو",2500],
+["زم زم سیل",4000],["اعجاز پٹھان",3500],["گل زمان",5000],["عدیل سپر سٹور",7500],
+["اے بی سی",7500],["کلک مارٹ",7500]
+];
+const months=["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
+let data={receipts:[],paid:{},winners:[]};
+try{const old=JSON.parse(localStorage.getItem("committee14_v1")||"null");if(old)data={...data,...old}}catch(e){}
+const fmt=n=>Number(n||0).toLocaleString("en-PK")+" روپے";
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("committee14_v1",JSON.stringify(data));render()}
+function render(){
+ $("membersBody").innerHTML=members.map((m,i)=>{let sum=data.receipts.filter(x=>x.member===i).reduce((a,x)=>a+Number(x.amount),0);return `<tr><td>${i+1}</td><td>${m[0]}</td><td>${fmt(m[1])}</td><td>${fmt(sum)}</td></tr>`}).join("");
+ $("rmember").innerHTML=members.map((m,i)=>`<option value="${i}">${m[0]} — ${fmt(m[1])}</option>`).join("");
+ $("dailyTotal").textContent=fmt(data.receipts.reduce((a,x)=>a+Number(x.amount),0));
+ $("receipts").innerHTML=data.receipts.slice().reverse().map(x=>`<div class="receipt"><b>${members[x.member][0]}</b> — ${fmt(x.amount)}<br><small>${x.date} ${x.note||""}</small> <button class="danger noprint" onclick="delReceipt('${x.id}')">حذف</button></div>`).join("")||"ابھی کوئی وصولی درج نہیں ہوئی۔";
+ $("committeeBody").innerHTML=members.map((m,i)=>{let key=$("month").value+"_"+i,paid=!!data.paid[key];return `<tr><td>${m[0]}</td><td>${paid?"قسط ادا ہوگئی":"قسط باقی ہے"}</td><td><button onclick="togglePaid(${i})">${paid?"واپس باقی کریں":"قسط ادا درج کریں"}</button></td></tr>`}).join("");
+ $("drawHistory").innerHTML=data.winners.map(w=>`<p>${months[w.month]}: <b>${members[w.member][0]}</b></p>`).join("");
+}
+function delReceipt(id){if(confirm("کیا یہ وصولی حذف کرنی ہے؟")){data.receipts=data.receipts.filter(x=>x.id!==id);save()}}
+window.delReceipt=delReceipt;
+function togglePaid(i){let k=$("month").value+"_"+i;data.paid[k]=!data.paid[k];save()}
+window.togglePaid=togglePaid;
+months.forEach((m,i)=>{ $("month").add(new Option(m,i));$("drawMonth").add(new Option(m,i))});
+$("month").value="0";$("rdate").value=new Date().toISOString().slice(0,10);
+$("rmember").addEventListener("change",()=>{$("ramount").value=members[+$("rmember").value][1]});
+$("ramount").value=members[0][1];
+$("receiptForm").addEventListener("submit",e=>{e.preventDefault();data.receipts.push({id:Date.now()+"",date:$("rdate").value,member:+$("rmember").value,amount:+$("ramount").value,note:$("rnote").value});$("rnote").value="";save()});
+$("month").addEventListener("change",render);
+$("drawBtn").addEventListener("click",()=>{let month=+$("drawMonth").value;if(data.winners.some(w=>w.month===month)){alert("اس مہینے کا قرعہ پہلے نکل چکا ہے۔");return}let used=data.winners.map(w=>w.member),eligible=members.map((m,i)=>i).filter(i=>!used.includes(i));if(!eligible.length){alert("تمام ممبران منتخب ہو چکے ہیں۔");return}let win=eligible[Math.floor(Math.random()*eligible.length)];data.winners.push({month,member:win});$("winner").textContent="مبارک ہو! "+members[win][0]+" منتخب ہوئے۔";save()});
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));$(b.dataset.tab).classList.remove("hidden")});
+$("backup").onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="committee-backup.json";a.click();URL.revokeObjectURL(a.href)};
+$("restore").onchange=async e=>{try{let x=JSON.parse(await e.target.files[0].text());if(!Array.isArray(x.receipts)||!x.paid||!Array.isArray(x.winners))throw 0;data=x;save();alert("بیک اپ بحال ہوگیا۔")}catch(_){alert("یہ بیک اپ فائل درست نہیں ہے۔")}};
+render();
+</script></body></html>
